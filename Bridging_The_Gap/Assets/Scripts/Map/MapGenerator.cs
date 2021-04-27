@@ -12,19 +12,7 @@ public class MapGenerator : MonoBehaviour
 
     [SerializeField] GameObject tile;
 
-    Map map = null;
-
-    // Start is called before the first frame update
-    void Awake()
-    {
-        GenerateMap();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    Map map;
 
     public void GenerateMap() {
         // Destroy the last map before rendering new one
@@ -42,13 +30,29 @@ public class MapGenerator : MonoBehaviour
                 }
                 new_Tile.transform.parent = transform;
 
+                new_Tile.name = "Tile_" + r + "_" + c;
+
                 map.level[r,c] = new Tile(r, c, new_Tile);
+
+                map.level[r,c].SpawnIn();
             }
         }
     }
 
     public void ClearMap() {
+        // Delete all refrences to map data structure
         map.Clear();
+
+        // Delete all children under map generator
+        // Need to save children to list so that deleting iterator doesn't skip every other child
+        List<Transform> childrenList = new List<Transform>();
+        foreach (Transform child in transform) {
+            childrenList.Add(child);
+        }
+
+        foreach (Transform child in childrenList) {
+            DestroyImmediate(child.gameObject);
+        }
     }
 
     void OnValidate() {
