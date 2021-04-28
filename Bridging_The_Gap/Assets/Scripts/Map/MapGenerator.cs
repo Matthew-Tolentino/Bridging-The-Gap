@@ -20,13 +20,18 @@ public class MapGenerator : MonoBehaviour
 
         map = new Map(row, col);
 
+        // Generating tiles
+        float tileRatio = tile.transform.localScale.x / 114.41f;
+        float rowMultiplier = tileRatio * 1.75f;
+        float colMultiplier = tileRatio * 2f;
+
         GameObject new_Tile = null;
         for (int r = 0; r < row; ++r) {
             for (int c = 0; c < col; ++c) {
                 if (r % 2 == 0) {
-                    new_Tile = Instantiate(tile, new Vector3(c * 2, 0, r * 1.75f), tile.transform.rotation);
+                    new_Tile = Instantiate(tile, new Vector3(c * colMultiplier, 0, r * rowMultiplier), tile.transform.rotation);
                 } else {
-                    new_Tile = Instantiate(tile, new Vector3(c * 2 + 1, 0, r * 1.75f), tile.transform.rotation);
+                    new_Tile = Instantiate(tile, new Vector3(c * colMultiplier + tileRatio, 0, r * rowMultiplier), tile.transform.rotation);
                 }
                 new_Tile.transform.parent = transform;
 
